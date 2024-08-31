@@ -16,7 +16,7 @@ from midi import MidiConnector
 # import subprocess
 # from flask import Flask, request, abort
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 conn = MidiConnector('/dev/serial0')
 note = 70
