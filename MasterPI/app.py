@@ -11,34 +11,34 @@
 
 #pip3 install py-midi
 
-import midi
-import os
-import subprocess
-from flask import Flask, request, abort
+from midi import MidiConnector
+# import os
+# import subprocess
+# from flask import Flask, request, abort
 
 app = Flask(__name__)
 
-conn = midi.MidiConnector('/dev/serial0', baudrate=38400, timeout=1)
+conn = MidiConnector('/dev/serial0')
 note = 70
 channel = 0
 msg = None # overwritten by read()
 port = 2000
 password = "asdl" # maybe not even have one
 
-@app.route('/master', methods=['GET'])
-def webhook():
-    query_password = request.args.get('password', '')  # Defaults to empty string if not found
-    if query_password != password:
-        return "Unauthorized", 401  # Unauthorized access
+# @app.route('/master', methods=['GET'])
+# def webhook():
+#     query_password = request.args.get('password', '')  # Defaults to empty string if not found
+#     if query_password != password:
+#         return "Unauthorized", 401  # Unauthorized access
 
-    if request.method == 'GET':
-        print(request.json)
-        return msg, 200
-    else:
-        abort(400)
+#     if request.method == 'GET':
+#         print(request.json)
+#         return msg, 200
+#     else:
+#         abort(400)
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=port)
+# if __name__ == '__main__':
+#     app.run(host="0.0.0.0", port=port)
 
 while True:
   try:
