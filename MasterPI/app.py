@@ -61,7 +61,7 @@ import os
 conn = midi.MidiConnector('/dev/serial0', baudrate=38400, timeout=1)
 
 note = 70
-channel = 0
+channel = 1
 
 while True:
   msg = None
