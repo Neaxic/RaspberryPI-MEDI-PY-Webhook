@@ -50,37 +50,35 @@
 #     print("MIDI read error")
 
 
-# import mido
 
-# # msg = mido.Message('note_on', note=60)
-# # msg.type
 
-# msg = mido.Message('note_on', note=60)
-# port = mido.open_output('Port Name')
-# port.send(msg)
-
-# while True:x
-#   with mido.open_input() as inport:
-#     for msg in inport:
-#         print(msg)
 
 
 #!/usr/bin/env python3
-# import mido
+import midi
+import os
 
-# inport = mido.open_input('128:1')
-# outport = mido.open_output('128:0')
-# for msg in inport:
-#   print(msg)
-#   outport.send(msg)
+conn = midi.MidiConnector('/dev/serial0', baudrate=38400, timeout=1)
 
-#!/usr/bin/env python3
-# ser = serial.Serial('/dev/serial1', baudrate=38400)
-#!/usr/bin/env python3
-import mido
+note = 70
+channel = 0
 
-inport = mido.open_input('MIDI Out')
-outport = mido.open_output('MIDI In')
-for msg in inport:
-  print(msg)
-  outport.send(msg)
+while True:
+  msg = None
+  try:
+    msg = conn.read()
+  except TypeError:
+    print("MIDI read error")
+
+  if msg != None:
+    print(msg)
+  else:
+    print("Sending note")
+    n = midi.NoteOn(note, 100)
+    conn.write(midi.Message(n, channel = channel))
+    os.system('sleep 1')
+    n = midi.NoteOff(note, 100)
+    conn.write(midi.Message(n, channel = channel))
+    note += 1
+    if note > 90:
+      note = 70
