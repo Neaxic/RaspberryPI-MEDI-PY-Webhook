@@ -79,7 +79,7 @@
 import serial
 import time
 
-ser = serial.Serial('/dev/serial0', baudrate=31250)
+ser = serial.Serial('/dev/serial0', baudrate=38400)
 channel = 0 # this represents channel 1
 note = 60 # C4
 velocity = 85
