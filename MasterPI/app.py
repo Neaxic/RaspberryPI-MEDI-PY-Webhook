@@ -75,10 +75,12 @@
 #   outport.send(msg)
 
 #!/usr/bin/env python3
+# ser = serial.Serial('/dev/serial1', baudrate=38400)
+#!/usr/bin/env python3
 import mido
 
-inport = mido.open_input('/dev/serial1')
-outport = mido.open_output('/dev/serial0')
+inport = mido.open_input('MIDI Out')
+outport = mido.open_output('MIDI In')
 for msg in inport:
   print(msg)
   outport.send(msg)
