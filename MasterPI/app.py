@@ -41,6 +41,10 @@ def midi_listener():
             if raw_data is not None:
                 # Print raw data for debugging
                 print(f"Raw MIDI Data: {raw_data}")
+                if(raw_data.type == midi.ProgramChange):
+                    print("Program Change")
+                if(raw_data.type == midi.ControlChange):
+                    print("Control Change")
 
                 # Process the raw MIDI data
                 msg = raw_data  # Assign the processed message
