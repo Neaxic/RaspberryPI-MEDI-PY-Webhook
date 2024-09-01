@@ -45,7 +45,8 @@ def midi_listener():
                     print("Program Change")
                 if(raw_data.type == midi.ControlChange):
                     print("Control Change")
-
+                print(f"thpe: ", raw_data.type)
+                print(f"pn: ", raw_data.program_number)
                 # Process the raw MIDI data
                 msg = raw_data  # Assign the processed message
                 print(f"Processed MIDI Message: {msg}")
