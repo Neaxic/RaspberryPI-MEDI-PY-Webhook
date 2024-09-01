@@ -75,22 +75,10 @@
 #   outport.send(msg)
 
 #!/usr/bin/env python3
+import mido
 
-import serial
-import time
-
-ser = serial.Serial('/dev/serial0', baudrate=38400)
-channel = 0 # this represents channel 1
-note = 60 # C4
-velocity = 85
-note_off = 8
-note_on = 9
-
-while True:
-  msg_note_on  = bytearray([(note_on << 4) | channel, note, velocity])
-  msg_note_off = bytearray([(note_off << 4) | channel, note, velocity])
-  print(str(hex(msg_note_on[0]))+' '+str(msg_note_on[1])+' '+str(msg_note_on[2]))
-  ser.write(msg_note_on)
-  time.sleep(0.5)
-  ser.write(msg_note_off)
-  time.sleep(0.5)
+inport = mido.open_input('/dev/serial1')
+outport = mido.open_output('/dev/serial0')
+for msg in inport:
+  print(msg)
+  outport.send(msg)
