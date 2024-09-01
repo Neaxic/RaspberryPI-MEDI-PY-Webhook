@@ -26,7 +26,13 @@ def webhook():
         if msg is None:
             return jsonify({"status": "No MIDI data available"}), 204  # 204 No Content
         else:
-            return jsonify({"midi_message": msg}), 200
+            # Convert the MIDI message to a JSON-serializable format
+            midi_data = {
+                "status": msg.status,  # Replace with the actual property names
+                "data1": msg.data1,    # Replace with the actual property names
+                "data2": msg.data2     # Replace with the actual property names
+            }
+            return jsonify(midi_data), 200
     else:
         abort(400)
 
@@ -42,9 +48,19 @@ def midi_listener():
                 # Print raw data for debugging
                 print(f"Raw MIDI Data: {raw_data}")
 
-                # Process the raw MIDI data
-                msg = raw_data  # Assign the processed message
-                print(f"Processed MIDI Message: {msg}")
+                # procces midi over to int
+                if("ProgramChange" in msg.status):
+                    print("yeha de")
+                
+                if("ControlChange" in msg.status):
+                    print("yeha na")
+
+                # Assign the raw_data to msg
+                msg = raw_data  # raw_data is expected to be a MIDI message object
+
+                # Example of converting raw_data to something JSON serializable
+                print(f"Processed MIDI Message: status={msg.status}, data1={msg.data1}, data2={msg.data2}")
+
         except AssertionError as e:
             print(f"AssertionError: {e}")
         except TypeError:
