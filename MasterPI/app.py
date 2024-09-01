@@ -1,7 +1,7 @@
 import midi
 import os
 import subprocess
-from flask import Flask, request, abort
+from flask import Flask, request, abort, jsonify
 import threading
 
 app = Flask(__name__)
@@ -22,8 +22,11 @@ def webhook():
     #     return "Unauthorized", 401  # Unauthorized access
 
     if request.method == 'GET':
-        print(request.json)
-        return msg, 200
+        # Ensure a valid response is returned
+        if msg is None:
+            return jsonify({"status": "No MIDI data available"}), 204  # 204 No Content
+        else:
+            return jsonify({"midi_message": msg}), 200
     else:
         abort(400)
 
@@ -34,11 +37,20 @@ def midi_listener():
     global msg
     while True:
         try:
-            msg = conn.read()
-            if msg is not None:
-                print(msg)
+            raw_data = conn.read()
+            if raw_data is not None:
+                # Print raw data for debugging
+                print(f"Raw MIDI Data: {raw_data}")
+
+                # Process the raw MIDI data
+                msg = raw_data  # Assign the processed message
+                print(f"Processed MIDI Message: {msg}")
+        except AssertionError as e:
+            print(f"AssertionError: {e}")
         except TypeError:
             print("MIDI read error")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
 
 if __name__ == '__main__':
     # Start the Flask API server in a separate thread
