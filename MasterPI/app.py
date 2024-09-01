@@ -72,13 +72,3 @@ while True:
 
   if msg != None:
     print(msg)
-  else:
-    print("Sending note")
-    n = midi.NoteOn(note, 100)
-    conn.write(midi.Message(n, channel = channel))
-    os.system('sleep 1')
-    n = midi.NoteOff(note, 100)
-    conn.write(midi.Message(n, channel = channel))
-    note += 1
-    if note > 90:
-      note = 70
