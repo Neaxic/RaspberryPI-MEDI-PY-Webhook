@@ -68,8 +68,8 @@
 #!/usr/bin/env python3
 import mido
 
-inport = mido.open_input('MIDI Out')
-outport = mido.open_output('MIDI In')
+inport = mido.open_input('128:1')
+outport = mido.open_output('128:0')
 for msg in inport:
   print(msg)
   outport.send(msg)
