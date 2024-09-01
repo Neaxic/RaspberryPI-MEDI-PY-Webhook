@@ -50,18 +50,27 @@
 #     print("MIDI read error")
 
 
-import mido
+# import mido
+
+# # msg = mido.Message('note_on', note=60)
+# # msg.type
 
 # msg = mido.Message('note_on', note=60)
-# msg.type
+# port = mido.open_output('Port Name')
+# port.send(msg)
 
-with mido.open_input() as inport:
-    for msg in inport:
-        print(msg)
-
-# while True:
+# while True:x
 #   with mido.open_input() as inport:
 #     for msg in inport:
 #         print(msg)
 
+
+#!/usr/bin/env python3
+import mido
+
+inport = mido.open_input('MIDI Out')
+outport = mido.open_output('MIDI In')
+for msg in inport:
+  print(msg)
+  outport.send(msg)
 
