@@ -14,6 +14,9 @@ msg = None  # This will be overwritten by read()
 port = 2000
 password = "asdl"  # maybe not even have one
 
+cc = 0
+pc = 0
+
 @app.route('/master', methods=['GET'])
 def webhook():
     # Uncomment the following lines if you need password protection
@@ -41,14 +44,19 @@ def midi_listener():
             if raw_data is not None:
                 # Print raw data for debugging
                 print(f"Raw MIDI Data: {raw_data}")
-                if(raw_data.type == midi.ProgramChange):
+                if("ProgramChange" in str(raw_data.type)):
                     print("Program Change")
-                if(raw_data.type == midi.ControlChange):
+                    pc = raw_data.program_number
+                if("ControlChange" in str(raw_data.type)):
                     print("Control Change")
+                    cc = raw_data.control_number
+                print(f"pc: ", midi.ProgramChange)
                 print(f"thpe: ", raw_data.type)
                 print(f"pn: ", raw_data.program_number)
                 # Process the raw MIDI data
-                msg = raw_data  # Assign the processed message
+                num = cc * 128 + pc
+
+                msg = num  # Assign the processed message
                 print(f"Processed MIDI Message: {msg}")
         except AssertionError as e:
             print(f"AssertionError: {e}")
