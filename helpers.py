@@ -34,6 +34,18 @@ def open_text_file_on_usb(usb_path, file_name):
     else:
         print(f"File {file_name} not found on USB drive.")
 
+def get_text_file_on_usb(usb_path, file_name):
+    """
+    Read context of txt file on USB drive.
+    """
+    file_path = os.path.join(usb_path, file_name)
+    if os.path.isfile(file_path):
+        with open(file_path, 'r') as file:
+            return file.read()
+    else:
+        print(f"File {file_name} not found on USB drive.")
+        return None
+
 def open_image_on_usb(usb_path, file_name):
     """
     Opens an image file on the USB drive.
