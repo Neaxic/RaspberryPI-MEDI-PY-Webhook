@@ -44,18 +44,18 @@ def midi_listener():
             if raw_data is not None:
                 print("---------------------------------new msg------------------------")
                 # Print raw data for debugging
-                print(f"Raw MIDI Data: {raw_data} - val {raw_data.value} - chan {raw_data.channel}")
+                # print(f"Raw MIDI Data: {raw_data} - val {raw_data.value} - chan {raw_data.channel}")
                 if("ProgramChange" in str(raw_data.type)):
                     pc = raw_data.program_number
                 if("ControlChange" in str(raw_data.type)):
-                    print(f"Control Change TEST", raw_data.control_number)
-                    cc = raw_data.control_number
+                    # print(f"Control Change TEST", raw_data.control_number)
+                    cc = raw_data.value
                 
                 # Process the raw MIDI data
                 num = cc * 128 + pc +1
 
                 msg = num  # Assign the processed message
-                print(f"-> END -- Processed MIDI Message: {msg}")
+                print(f"-> END -- Processed MIDI Message: {msg} - cc {cc} - pc {pc}")
         except AssertionError as e:
             print(f"AssertionError: {e}")
         except TypeError:
