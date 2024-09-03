@@ -3,8 +3,8 @@ import subprocess
 import time
 
 # URL of the localhost API
-port = 5000
-getinterval = 5 #in secounds
+port = 2000
+getinterval = 10 #in secounds
 api_url = f"http://localhost:{port}/master"  # Fixed string formatting for port
 
 # Dictionary mapping variable names to file names

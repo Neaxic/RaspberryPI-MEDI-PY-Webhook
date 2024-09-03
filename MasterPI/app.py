@@ -26,7 +26,7 @@ def webhook():
     # query_password = request.args.get('password', '')  # Defaults to empty string if not found
     # if query_password != password:
     #     return "Unauthorized", 401  # Unauthorized access
-
+    print("!!API Request!!")
     if request.method == 'GET':
         with msg_lock:
             # Ensure a valid response is returned
