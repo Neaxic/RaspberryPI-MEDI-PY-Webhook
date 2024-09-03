@@ -1,37 +1,47 @@
 import requests
+import subprocess
 import time
 import socket
 
+# URL of the localhost API
 PORT = 2000
-SUBNET = '192.168.86.'  # Update this to match your actual subnet
+IPNET = '192.168.86.184'
+ENDPOINT = 'master'
+FETCHINTERVAL = 1 #in secounds
 
-def find_master():
-    for i in range(1, 255):  # Scan all possible IP addresses in the subnet
-        ip = f"{SUBNET}{i}"
-        try:
-            with socket.create_connection((ip, PORT), timeout=0.1):
-                return ip
-        except (socket.timeout, ConnectionRefusedError):
-            continue
-    return None
+# Variable to store the last variable name
+last_variable_name = None
 
-def get_midi_data():
-    master_ip = find_master()
-    if master_ip:
-        try:
-            response = requests.get(f"http://{master_ip}:{PORT}/master")
-            if response.status_code == 200:
-                return response.json()['midi_message']
-            else:
-                print(f"Error: Received status code {response.status_code}")
-        except requests.RequestException as e:
-            print(f"Error connecting to master: {e}")
-    else:
-        print("Master not found")
-    return None
+# Dictionary mapping variable names to file names
+file_dict = {
+    'var1': 'file1.png',
+    'var2': 'file2.png',
+    'var3': 'file3.png',
+    'var4': 'file4.png',
+    'var5': 'file5.png',
+}
+
 
 while True:
-    midi_data = get_midi_data()
-    if midi_data:
-        print(f"Received MIDI data: {midi_data}")
-    time.sleep(1)  # Wait for 1 second before next request
+    api_url = f"http://{IPNET}:{PORT}/{ENDPOINT}"
+    if api_url:
+        # Send a GET request to the API
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            # Extract the variable name from the response
+            variable_name = response.json().get('variable_name')
+            # Check if the variable name has changed
+            if variable_name != last_variable_name:
+                # Update the last variable name
+                last_variable_name = variable_name
+                # Get the file name based on the variable name, default to 'default.png'
+                file_name = file_dict.get(variable_name, 'default.png')
+                # Open the file
+                subprocess.run(['open', file_name], check=True)
+        else:
+            print("Failed to get variable name from API")
+    else:
+        print("Failed to connect to any IP in the list")
+    
+    # Wait for a short period before sending the next request
+    time.sleep(FETCHINTERVAL)  # Wait for 10 seconds
