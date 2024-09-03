@@ -20,6 +20,8 @@ pc = 0
 # Create a lock for synchronizing access to the msg variable
 msg_lock = threading.Lock()
 
+ip_list = ['192.168.1.10', '192.168.1.11', '192.168.1.12']
+
 @app.route('/master', methods=['GET'])
 def webhook():
     # Uncomment the following lines if you need password protection
@@ -37,7 +39,12 @@ def webhook():
         abort(400)
 
 def run_flask():
-    app.run(host="0.0.0.0", port=port)
+    for ip in ip_list:
+        try:
+            app.run(host=ip, port=port)
+            break
+        except Exception as e:
+            print(f"Failed to bind to {ip}: {e}")
 
 def midi_listener():
     global msg, cc, pc
