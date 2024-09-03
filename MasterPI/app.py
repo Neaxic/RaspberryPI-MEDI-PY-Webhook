@@ -50,11 +50,9 @@ def midi_listener():
                 if("ControlChange" in str(raw_data.type)):
                     print("Control Change")
                     cc = raw_data.control_number
-                print(f"pc: ", midi.ProgramChange)
-                print(f"thpe: ", raw_data.type)
-                print(f"pn: ", raw_data.program_number)
+                
                 # Process the raw MIDI data
-                num = cc * 128 + pc
+                num = cc * 128 + pc +1
 
                 msg = num  # Assign the processed message
                 print(f"Processed MIDI Message: {msg}")
