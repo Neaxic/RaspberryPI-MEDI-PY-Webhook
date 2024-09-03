@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+RASPBERRYUSERNAME = "god"
+
 def find_usb_drive():
     """
     Finds the path of the connected USB drive.
@@ -12,7 +14,7 @@ def find_usb_drive():
     
     # Look for a line that contains '/media/pi/' or '/mnt/' which is typical for USB drives on Raspberry Pi
     for line in output.split('\n'):
-        if '/media/pi/' in line or '/mnt/' in line:
+        if '/media/{RASPBERRYUSERNAME}/' in line or '/mnt/' in line:
             return line.split()[-1]
     return None
 
