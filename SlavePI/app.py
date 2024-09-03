@@ -1,11 +1,13 @@
 import requests
 import subprocess
 import time
+import socket
 
 # URL of the localhost API
 port = 2000
 getinterval = 10 #in secounds
-api_url = f"http://localhost:{port}/master"  # Fixed string formatting for port
+local_ip = ""
+api_url = f"http://{local_ip}:{port}/master"  # Fixed string formatting for port
 
 # Dictionary mapping variable names to file names
 file_dict = {
@@ -19,7 +21,24 @@ file_dict = {
 # Variable to store the last variable name
 last_variable_name = None
 
+# Function to get the local IP address
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.254.254.254', 1))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = '127.0.0.1'
+    finally:
+        s.close()
+    return ip
+
+# Get the local IP address
+local_ip = get_local_ip()
+
 while True:
+    print(local_ip)
     # Send a GET request to the API
     response = requests.get(api_url)
 
