@@ -1,5 +1,6 @@
 import os
 import subprocess
+import re
 
 RASPBERRYUSERNAME = "god"
 
@@ -55,3 +56,14 @@ def open_image_on_usb(usb_path, file_name):
         subprocess.run(['open', file_path], check=True)
     else:
         print(f"File {file_name} not found on USB drive.")
+
+def find_matching_file(regex, usb_path, variable_name):
+    """
+    Finds a file in the USB drive directory that matches the regex pattern.
+    """
+    for file in os.listdir(usb_path):
+        if re.match(regex, file):
+            # Check if the file name (without extension) matches the variable name
+            if file.startswith(variable_name):
+                return file
+    return 'default.png'
