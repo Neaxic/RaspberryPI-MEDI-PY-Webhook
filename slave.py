@@ -24,12 +24,13 @@ file_dict = {
 }
 
 foundUSB = False
+config = ""
 
 while True:
     # Find and connect to USB drive
     if not foundUSB:
         usb_path = helpers.find_usb_drive()
-    if usb_path:
+    if usb_path & foundUSB == False:
         foundUSB = True
         print(f"USB drive found.", usb_path)
         # helpers.open_usb_drive(usb_path)
@@ -37,7 +38,8 @@ while True:
         # Open an image file on the USB drive
         # helpers.open_image_on_usb(usb_path, 'image.png')
         # Read the content of a text file on the USB drive
-        print(helpers.get_text_file_on_usb(usb_path, 'config.txt'))
+        config = helpers.get_text_file_on_usb(usb_path, 'config.txt')
+        print(config)
     else:
         print("USB drive not found.")
         foundUSB = False
@@ -49,7 +51,9 @@ while True:
         response = requests.get(api_url)
         if response.status_code == 200:
             # Extract the variable name from the response
+            print(response.json())
             variable_name = response.json().get('variable_name')
+            print(f"Variable name: {variable_name}")
             # Check if the variable name has changed
             if variable_name != last_variable_name:
                 # Update the last variable name
