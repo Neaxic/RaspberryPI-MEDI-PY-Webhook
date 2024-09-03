@@ -46,7 +46,7 @@ def midi_listener():
                 print(f"Raw MIDI Data: {raw_data}")
                 if("ProgramChange" in str(raw_data.type)):
                     print("Program Change")
-                    pc = raw_data.program_number
+                    pc = raw_data.program_number + 1
                 if("ControlChange" in str(raw_data.type)):
                     print("Control Change")
                     cc = raw_data.control_number
