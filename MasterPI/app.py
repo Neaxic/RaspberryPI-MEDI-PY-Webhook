@@ -17,6 +17,9 @@ password = "asdl"  # maybe not even have one
 cc = 0
 pc = 0
 
+# Create a lock for synchronizing access to the msg variable
+msg_lock = threading.Lock()
+
 @app.route('/master', methods=['GET'])
 def webhook():
     # Uncomment the following lines if you need password protection
@@ -25,11 +28,12 @@ def webhook():
     #     return "Unauthorized", 401  # Unauthorized access
 
     if request.method == 'GET':
-        # Ensure a valid response is returned
-        if msg is None:
-            return jsonify({"status": "No MIDI data available"}), 204  # 204 No Content
-        else:
-            return jsonify({"midi_message": msg}), 200
+        with msg_lock:
+            # Ensure a valid response is returned
+            if msg is None:
+                return jsonify({"status": "No MIDI data available"}), 204  # 204 No Content
+            else:
+                return jsonify({"midi_message": msg}), 200
     else:
         abort(400)
 
@@ -37,7 +41,7 @@ def run_flask():
     app.run(host="0.0.0.0", port=port)
 
 def midi_listener():
-    global msg
+    global msg, cc, pc
     while True:
         try:
             raw_data = conn.read()
@@ -45,16 +49,17 @@ def midi_listener():
                 print("---------------------------------new msg------------------------")
                 # Print raw data for debugging
                 # print(f"Raw MIDI Data: {raw_data} - val {raw_data.value} - chan {raw_data.channel}")
-                if("ProgramChange" in str(raw_data.type)):
+                if "ProgramChange" in str(raw_data.type):
                     pc = raw_data.program_number
-                if("ControlChange" in str(raw_data.type)):
+                if "ControlChange" in str(raw_data.type):
                     # print(f"Control Change TEST", raw_data.control_number)
                     cc = raw_data.value
                 
                 # Process the raw MIDI data
-                num = cc * 128 + pc +1
+                num = cc * 128 + pc + 1
 
-                msg = num  # Assign the processed message
+                with msg_lock:
+                    msg = num  # Assign the processed message
                 print(f"-> END -- Processed MIDI Message: {msg} - cc {cc} - pc {pc}")
         except AssertionError as e:
             print(f"AssertionError: {e}")
