@@ -44,12 +44,12 @@ def midi_listener():
             if raw_data is not None:
                 print("---------------------------------new msg------------------------")
                 # Print raw data for debugging
-                print(f"Raw MIDI Data: {raw_data}")
+                print(f"Raw MIDI Data: {raw_data} - val {raw_data.value} - chan {raw_data.channel}")
                 if("ProgramChange" in str(raw_data.type)):
                     pc = raw_data.program_number
                 if("ControlChange" in str(raw_data.type)):
                     print(f"Control Change TEST", raw_data.control_number)
-                    cc = raw_data.control_number +1
+                    cc = raw_data.control_number
                 
                 # Process the raw MIDI data
                 num = cc * 128 + pc +1
