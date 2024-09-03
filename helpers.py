@@ -12,9 +12,9 @@ def find_usb_drive():
     result = subprocess.run(['df', '-h'], stdout=subprocess.PIPE)
     output = result.stdout.decode('utf-8')
     
-    # Look for a line that contains '/media/pi/' or '/mnt/' which is typical for USB drives on Raspberry Pi
+    # Look for a line that contains '/media/{RASPBERRYUSERNAME}/' or '/mnt/' which is typical for USB drives on Raspberry Pi
     for line in output.split('\n'):
-        if '/media/{RASPBERRYUSERNAME}/' in line or '/mnt/' in line:
+        if f'/media/{RASPBERRYUSERNAME}/' in line or '/mnt/' in line:
             return line.split()[-1]
     return None
 
