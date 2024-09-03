@@ -8,8 +8,7 @@ import helpers
 PORT = 2000
 IPNET = '192.168.86.184'
 ENDPOINT = 'master'
-FETCHINTERVAL = 1 #in secounds
-USBNAME = "NONAME"
+FETCHINTERVAL = 3 #in secounds
 
 # Variable to store the last variable name
 last_variable_name = None
@@ -30,7 +29,7 @@ while True:
     # Find and connect to USB drive
     if not foundUSB:
         usb_path = helpers.find_usb_drive()
-    if usb_path and foundUSB == False:
+    if usb_path and config == "":
         foundUSB = True
         print(f"USB drive found.", usb_path)
         # helpers.open_usb_drive(usb_path)
@@ -40,7 +39,7 @@ while True:
         # Read the content of a text file on the USB drive
         config = helpers.get_text_file_on_usb(usb_path, 'config.txt')
         print(config)
-    else:
+    if not foundUSB and usb_path == None:
         print("USB drive not found.")
         foundUSB = False
 
@@ -50,18 +49,12 @@ while True:
         # Send a GET request to the API
         response = requests.get(api_url)
         if response.status_code == 200:
-            # Extract the variable name from the response
-            print(response.json())
-            variable_name = response.json().get('variable_name')
-            print(f"Variable name: {variable_name}")
-            # Check if the variable name has changed
+            variable_name = response.json().get('midi_message')
             if variable_name != last_variable_name:
-                # Update the last variable name
                 last_variable_name = variable_name
-                # Get the file name based on the variable name, default to 'default.png'
                 file_name = file_dict.get(variable_name, 'default.png')
-                # Open the file
-                subprocess.run(['open', file_name], check=True)
+                print(f"Variable name: {variable_name}, File name: {file_name}")
+                helpers.open_image_on_usb(usb_path, file_name)
         else:
             print("Failed to get variable name from API")
     else:
