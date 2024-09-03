@@ -43,7 +43,7 @@ while True:
             variable_name = response.json().get('midi_message')
             if variable_name != last_variable_name:
                 last_variable_name = variable_name
-                file_name = helpers.find_matching_file(usb_path, variable_name)
+                file_name = helpers.find_matching_file(FILENAMEREGEX, usb_path, variable_name)
                 print(f"Variable name: {variable_name}, File name: {file_name}")
                 helpers.open_image_on_usb(usb_path, file_name)
         else:
