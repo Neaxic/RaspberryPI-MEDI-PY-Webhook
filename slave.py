@@ -30,7 +30,7 @@ while True:
     # Find and connect to USB drive
     if not foundUSB:
         usb_path = helpers.find_usb_drive()
-    if usb_path & foundUSB == False:
+    if usb_path and foundUSB == False:
         foundUSB = True
         print(f"USB drive found.", usb_path)
         # helpers.open_usb_drive(usb_path)
