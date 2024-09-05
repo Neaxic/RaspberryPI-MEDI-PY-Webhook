@@ -1,0 +1,21 @@
+CREDENTIALS = "1923812931923"
+PORT = 2000
+IPNET = '192.168.86.184'
+ENDPOINT = 'master'
+FETCHINTERVAL = 1
+FILENAMEREGEX = r"^\d{1,6}(.png|.jpg|.jpeg)$"
+ISMASTER = True
+MASTERIMG = True
+OSUSER = "god"
+AUTOUPDATE = True
+
+"feh -d -F loc"
+
+read config better
+
+combine slave + master
+
+make code more redable
+
+edit the regex
+

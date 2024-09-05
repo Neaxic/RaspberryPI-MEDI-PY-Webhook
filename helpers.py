@@ -67,3 +67,15 @@ def find_matching_file(regex, usb_path, variable_name):
             if file.startswith(variable_name):
                 return file
     return 'default.png'
+
+import subprocess
+
+def git_pull():
+    """
+    Perform a git pull to update the repository.
+    """
+    try:
+        result = subprocess.run(['git', 'pull', "-f"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print(result.stdout.decode('utf-8'))
+    except subprocess.CalledProcessError as e:
+        print(f"Error during git pull: {e.stderr.decode('utf-8')}")
